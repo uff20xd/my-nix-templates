@@ -7,16 +7,10 @@
     templates.rust = {
       path = ./rust-native;
       description = "A simple rust dev_shell and pkgng flake.";
-      welcomeText = ''
-        None
-      '';
     };
     templates.general = {
       path = ./general;
-      description = "A simple no dependency shell for packaging your programs.";
-      welcomeText = ''
-        None
-      '';
+      description = "A simple no dependency flake for packaging your programs.";
     };
     templates.default = self.templates.general;
   };
