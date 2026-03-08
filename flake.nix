@@ -1,11 +1,9 @@
 {
   description = "A very basic flake";
 
-  inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-  };
+  inputs = {};
 
-  outputs = { self, nixpkgs }: {
+  outputs = { self }: {
     templates.rust = {
       path = ./rust-native;
       description = "A simple rust dev_shell and pkgng flake.";
