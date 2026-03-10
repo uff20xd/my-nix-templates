@@ -17,6 +17,8 @@
         ];
       in
       {
+        overlays.default = final: prev: { rust_package = self.packages.default; };
+
         packages."${system}" = {
           default = pkgs.hello; 
         };
