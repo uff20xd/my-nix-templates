@@ -8,13 +8,16 @@
   outputs = { self, nixpkgs }: 
     let 
       supportedSystems = [ "x86_64-linux" ];
-      forAllSystems = pkgsRaw: evaluation: (nixpkgs.lib.genAttrs supportedSystems) (system:  evaluation system pkgsRaw.${system});
+      forAllSystems = pkgsRaw: overlays: evaluation: (nixpkgs.lib.genAttrs supportedSystems) (system:  evaluation system (import pkgsRaw {
+        inherit system;
+        inherit overlays;
+      }));
     in {
-      overlays.default = final: prev: { hello = self.packages.default; };
-      packages = forAllSystems nixpkgs.legacyPackages (system: pkgs: rec {
-          default = pkgs.hello;
+      overlays.default = final: prev: { hello = self.hello final; };
+      packages = forAllSystems nixpkgs [] (system: pkgs: rec {
+          default = self.hello pkgs;
           });
-      devShells = forAllSystems nixpkgs.legacyPackages (system: pkgs: rec {
+      devShells = forAllSystems nixpkgs [] (system: pkgs: rec {
         default = pkgs.mkShellNoCC rec {
           nativeBuildInputs = [ pkgs.pkg-config ];
           buildInputs = with pkgs; [
@@ -22,5 +25,6 @@
           ];
         };
       });
+      hello = pkgs: pkgs.hello;
     };
 }
